@@ -1,2 +1,1 @@
-# ym_backend
-python flask mysql
+### python flask web
