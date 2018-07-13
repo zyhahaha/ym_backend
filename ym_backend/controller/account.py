@@ -2,9 +2,8 @@ class account(object):
   def __init__(self, arg):
     self.arg = arg
 
-  def test():
+  def test(self):
     return 'account test'
 
-  def test22(params):
-    print(params)
+  def register(self, params):
     return False
