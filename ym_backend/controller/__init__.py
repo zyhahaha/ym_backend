@@ -3,5 +3,5 @@
 
 from ym_backend import model
 
-from .account import account
+from .account import Account
 from .common import upload_file

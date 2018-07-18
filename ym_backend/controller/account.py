@@ -20,37 +20,62 @@ class AlchemyEncoder(json.JSONEncoder):
 
     return json.JSONEncoder.default(self, obj)
 
-class account(object):
+class Account(object):
   def __init__(self, arg):
     self.arg = arg
 
-  def test():
-    return 'account test'
+  def register(self, params):
+    if params and params['name'] and params['password']:
+      username = params['name']
+      password = params['password']
+      user = User(username = username, password = password)
+      db.session.add(user)
+      db.session.commit()
+      users = User.query.filter(User.username == username).first()
+      users = self.jsonHandle(users)
+      return users
+    else:
+      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
 
-  def register(params):
-    return False
-
-  def queryUser():
-    users = User.query.filter(User.username == 'zhao1111').first()
-    users = json.dumps(users, cls=AlchemyEncoder)
+  def queryUser(self, params):
+    name = ''
+    if params and params['name']:
+      name = params['name']
+    users = User.query.filter(User.username == name).first()
+    users = self.jsonHandle(users)
     print(users)
     return users
 
-  def addUser():
-    user = User(username = 'zhao1111', password = '123456')
-    db.session.add(user)
-    db.session.commit()
+  # 查询所有
+  def queryUserAll(self):
     users = User.query.all()
-    users = json.dumps(users, cls=AlchemyEncoder)
-    print(users)
+    users = self.jsonHandle(users)
     return users
 
-  def modifyUser():
-    user = User.query.filter(User.username == 'zhao').first()
-    user.password = '654321'
-    db.session.commit()
+  def modifyUser(self, params):
+    if params and params['name'] and params['password']:
+      username = params['name']
+      password = params['password']
+      user = User.query.filter(User.username == username).first()
+      user.password = password
+      db.session.commit()
+      users = User.query.filter(User.username == username).first()
+      users = self.jsonHandle(users)
+      return users
+    else:
+      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
 
-  def delUser():
-    user = User.query.filter(User.username == 'zhao').first()
-    db.session.delete(user)
-    db.session.commit()
+  def delUser(self, params):
+    if params and params['id']:
+      id = params['id']
+      user = User.query.filter(User.id == id).first()
+      db.session.delete(user)
+      db.session.commit()
+      result = { 'code': 200, 'msg': '删除成功' }
+      result = self.jsonHandle(result)
+      return result
+    else:
+      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
+
+  def jsonHandle(self, obj):
+    return json.dumps(obj, cls=AlchemyEncoder, ensure_ascii=False)

@@ -1,31 +1,55 @@
 import json
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, request
 from ym_backend import controller
 
 account = Blueprint('account',__name__)
+accountCtrl = controller.Account(__name__)
 
 @account.route('/')
 def index():
   return render_template('./index.html')
 
-@account.route('/test')
-def test():
-  return controller.account.test()
+# 注册
+@account.route('/register', methods=['POST'])
+def register():
+  name = request.form['name']
+  password = request.form['password']
+  params = {
+    'name': name,
+    'password': password
+  }
+  return accountCtrl.register(params)
 
-@account.route('/queryUser')
+# 登录
+@account.route('login', methods=['POST'])
+def login():
+  return 'login'
+
+# 查询用户信息
+@account.route('/queryUser', methods=['POST', 'GET'])
 def queryUser():
-  return controller.account.queryUser()
+  if request.method == 'POST':
+    name = request.form['name']
+    params = {
+      'name': name
+    }
+    return accountCtrl.queryUser(params)
+  elif request.method == 'GET':
+    return accountCtrl.queryUserAll()
 
-@account.route('/addUser')
-def addUser():
-  users = controller.account.addUser()
-  usersJson = json.dumps(users)
-  return usersJson
-
-@account.route('/modifyUser')
+# 修改用户信息
+@account.route('/modifyUser', methods=['POST'])
 def modifyUser():
-  return controller.account.modifyUser()
+  name = request.form['name']
+  password = request.form['password']
+  params = {
+    'name': name,
+    'password': password
+  }
+  return accountCtrl.modifyUser(params)
 
-@account.route('/delUser')
+# 删除用户信息
+@account.route('/delUser', methods=['POST'])
 def delUser():
-  return controller.account.delUser()
+  id = request.form['id']
+  return accountCtrl.delUser({'id': id})
