@@ -31,7 +31,10 @@ class account(object):
     return False
 
   def queryUser():
-    User.query.filter(User.username == 'zhao').first()
+    users = User.query.filter(User.username == 'zhao1111').first()
+    users = json.dumps(users, cls=AlchemyEncoder)
+    print(users)
+    return users
 
   def addUser():
     user = User(username = 'zhao1111', password = '123456')
