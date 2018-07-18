@@ -1,9 +1,11 @@
 from ym_backend import app, controller
 from flask import render_template
 from .account import account
+from .product import product
 # from .common import common
 
 app.register_blueprint(account, url_prefix='/account')
+app.register_blueprint(product, url_prefix='/product')
 
 @app.route('/', methods=['GET'])
 def index():

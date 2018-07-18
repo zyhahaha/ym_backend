@@ -33,9 +33,9 @@ class Account(object):
       user = User(username = username, password = password)
       db.session.add(user)
       db.session.commit()
-      users = User.query.filter(User.username == username).first()
-      users = self.jsonHandle(users)
-      return users
+      # users = User.query.filter(User.username == username).first()
+      userResult = self.jsonHandle(user)
+      return userResult
     else:
       return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
 
@@ -60,7 +60,6 @@ class Account(object):
       name = params['name']
     users = User.query.filter(User.username == name).first()
     users = self.jsonHandle(users)
-    print(users)
     return users
 
   # 查询所有
