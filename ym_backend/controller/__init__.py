@@ -3,6 +3,6 @@
 
 from ym_backend import model
 
-from .account import Account
+from .account_ctrl import Account
 from .product_ctrl import Product
 from .common import upload_file
