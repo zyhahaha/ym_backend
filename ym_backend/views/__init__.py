@@ -10,6 +10,11 @@ app.register_blueprint(product, url_prefix='/product')
 @app.route('/', methods=['GET'])
 def index():
     return render_template('/upload.html')
+
 @app.route('/upload', methods=['POST'])
 def upload():
   return controller.common.upload_file()
+
+@app.route('/sendEmail', methods=['POST'])
+def sendEmail():
+  return controller.common.send_email()
