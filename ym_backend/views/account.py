@@ -21,9 +21,15 @@ def register():
   return accountCtrl.register(params)
 
 # 登录
-@account.route('login', methods=['POST'])
+@account.route('/login', methods=['POST'])
 def login():
-  return 'login'
+  name = request.form['name']
+  password = request.form['password']
+  params = {
+    'name': name,
+    'password': password
+  }
+  return accountCtrl.login(params)
 
 # 查询用户信息
 @account.route('/queryUser', methods=['POST', 'GET'])

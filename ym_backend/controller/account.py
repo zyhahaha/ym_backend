@@ -3,6 +3,7 @@ import json
 from ym_backend import model, db
 User = model.User
 
+# sql json处理
 class AlchemyEncoder(json.JSONEncoder):
   def default(self, obj):
     if isinstance(obj.__class__, DeclarativeMeta):
@@ -24,6 +25,7 @@ class Account(object):
   def __init__(self, arg):
     self.arg = arg
 
+  # 注册
   def register(self, params):
     if params and params['name'] and params['password']:
       username = params['name']
@@ -37,6 +39,21 @@ class Account(object):
     else:
       return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
 
+  #登录
+  def login(self, params):
+    if params and params['name'] and params['password']:
+      username = params['name']
+      password = params['password']
+      users = User.query.filter_by(username = username, password = password).first()
+      if not users:
+        return self.jsonHandle({ 'code': 400, 'msg': '登录失败' })
+      else:
+        users = self.jsonHandle(users)
+        return self.jsonHandle({ 'code': 200, 'msg': '登录成功' })
+    else:
+      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
+
+  # 查询用户信息
   def queryUser(self, params):
     name = ''
     if params and params['name']:
@@ -52,6 +69,7 @@ class Account(object):
     users = self.jsonHandle(users)
     return users
 
+  # 修改用户信息
   def modifyUser(self, params):
     if params and params['name'] and params['password']:
       username = params['name']
@@ -65,6 +83,7 @@ class Account(object):
     else:
       return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
 
+  # 删除用户信息
   def delUser(self, params):
     if params and params['id']:
       id = params['id']
@@ -77,5 +96,6 @@ class Account(object):
     else:
       return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
 
+  # 处理json
   def jsonHandle(self, obj):
     return json.dumps(obj, cls=AlchemyEncoder, ensure_ascii=False)
