@@ -1,4 +1,5 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from flask import make_response
 import json
 from ym_backend import model, db
 User = model.User
@@ -34,10 +35,10 @@ class Account(object):
       db.session.add(user)
       db.session.commit()
       # users = User.query.filter(User.username == username).first()
-      userResult = self.jsonHandle(user)
+      userResult = self.responseHandle(user)
       return userResult
     else:
-      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
+      return self.responseHandle({ 'err': 400, 'msg': '参数不能为空' })
 
   #登录
   def login(self, params):
@@ -46,12 +47,12 @@ class Account(object):
       password = params['password']
       users = User.query.filter_by(username = username, password = password).first()
       if not users:
-        return self.jsonHandle({ 'code': 400, 'msg': '登录失败' })
+        return self.responseHandle({ 'code': 400, 'msg': '登录失败' })
       else:
-        users = self.jsonHandle(users)
-        return self.jsonHandle({ 'code': 200, 'msg': '登录成功' })
+        users = self.responseHandle(users)
+        return self.responseHandle({ 'code': 200, 'msg': '登录成功' })
     else:
-      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
+      return self.responseHandle({ 'err': 400, 'msg': '参数不能为空' })
 
   # 查询用户信息
   def queryUser(self, params):
@@ -59,13 +60,13 @@ class Account(object):
     if params and params['name']:
       name = params['name']
     users = User.query.filter(User.username == name).first()
-    users = self.jsonHandle(users)
+    users = self.responseHandle(users)
     return users
 
   # 查询所有
   def queryUserAll(self):
     users = User.query.all()
-    users = self.jsonHandle(users)
+    users = self.responseHandle(users)
     return users
 
   # 修改用户信息
@@ -77,10 +78,10 @@ class Account(object):
       user.password = password
       db.session.commit()
       users = User.query.filter(User.username == username).first()
-      users = self.jsonHandle(users)
+      users = self.responseHandle(users)
       return users
     else:
-      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
+      return self.responseHandle({ 'err': 400, 'msg': '参数不能为空' })
 
   # 删除用户信息
   def delUser(self, params):
@@ -90,11 +91,14 @@ class Account(object):
       db.session.delete(user)
       db.session.commit()
       result = { 'code': 200, 'msg': '删除成功' }
-      result = self.jsonHandle(result)
+      result = self.responseHandle(result)
       return result
     else:
-      return self.jsonHandle({ 'err': 400, 'msg': '参数不能为空' })
+      return self.responseHandle({ 'err': 400, 'msg': '参数不能为空' })
 
-  # 处理json
-  def jsonHandle(self, obj):
-    return json.dumps(obj, cls=AlchemyEncoder, ensure_ascii=False)
+  # 处理响应
+  def responseHandle(self, obj):
+    jsonStr = json.dumps(obj, cls=AlchemyEncoder, ensure_ascii=False)
+    response = make_response(jsonStr)
+    response.headers['Content-Type'] = 'application/json'
+    return response
