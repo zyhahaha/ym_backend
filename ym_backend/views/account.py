@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, render_template, redirect, request
-from ym_backend import controller
+from ym_backend import controller, util
 
 account = Blueprint('account',__name__)
 accountCtrl = controller.Account(__name__)
@@ -34,6 +34,10 @@ def login():
 # 查询用户信息
 @account.route('/queryUser', methods=['POST', 'GET'])
 def queryUser():
+  token = request.headers.get('Token')
+  isAuth = util.checkAuth(token)
+  if not isAuth:
+    return '未登录'
   if request.method == 'POST':
     name = request.form['name']
     params = {
