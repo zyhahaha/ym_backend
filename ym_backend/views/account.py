@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import json
 from flask import Blueprint, render_template, redirect, request
 from ym_backend import controller, util

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from ym_backend import app, controller
 from flask import render_template
 from .account import account

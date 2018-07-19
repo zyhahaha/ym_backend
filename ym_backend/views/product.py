@@ -6,6 +6,8 @@ product = Blueprint('product',__name__)
 ProductCtrl = controller.Product(__name__)
 
 @product.route('/')
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 def index():
   return render_template('./index.html')
 

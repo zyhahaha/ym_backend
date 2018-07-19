@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from flask import Flask, url_for, request, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)

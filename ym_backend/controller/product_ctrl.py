@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from flask import make_response
 import json
