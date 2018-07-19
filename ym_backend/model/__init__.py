@@ -1,4 +1,4 @@
-from .account_model import User
+from .account_model import Account
 from .product_model import Product
 from ym_backend import db
 
