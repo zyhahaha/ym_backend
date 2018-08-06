@@ -7,8 +7,8 @@ class Account(db.Model):
   uuid = db.Column(db.Integer, primary_key=True)
 
   token = db.Column(db.String(50), unique=True)
-  username = db.Column(db.String(80), unique=True)
-  emai = db.Column(db.String(320), unique=True)
+  username = db.Column(db.String(80))
+  emai = db.Column(db.String(320))
   password = db.Column(db.String(32), nullable=False)
 
   def __repr__(self):
