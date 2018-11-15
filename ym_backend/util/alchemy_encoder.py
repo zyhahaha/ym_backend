@@ -19,3 +19,6 @@ class AlchemyEncoder(json.JSONEncoder):
         return fields
 
     return json.JSONEncoder.default(self, obj)
+
+def sqlJsonDump(obj):
+    return json.dumps(obj, cls = AlchemyEncoder, ensure_ascii = False)

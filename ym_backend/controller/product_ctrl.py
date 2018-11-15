@@ -3,26 +3,9 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from flask import make_response
 import json
-from ym_backend import model, db
+from ym_backend import model, db, util
 ProductModel = model.Product
-
-# sql json处理
-class AlchemyEncoder(json.JSONEncoder):
-  def default(self, obj):
-    if isinstance(obj.__class__, DeclarativeMeta):
-        # an SQLAlchemy class
-        fields = {}
-        for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-            data = obj.__getattribute__(field)
-            try:
-                json.dumps(data) # this will fail on non-encodable values, like other classes
-                fields[field] = data
-            except TypeError:
-                fields[field] = None
-        # a json-encodable dict
-        return fields
-
-    return json.JSONEncoder.default(self, obj)
+sqlJsonDump = util.sqlJsonDump
 
 class Product(object):
   def __init__(self, arg):
@@ -89,7 +72,7 @@ class Product(object):
 
   # 处理响应
   def responseHandle(self, obj):
-    jsonStr = json.dumps(obj, cls=AlchemyEncoder, ensure_ascii=False)
+    jsonStr = sqlJsonDump(obj)
     response = make_response(jsonStr)
     response.headers['Content-Type'] = 'application/json' 
     return response

@@ -6,7 +6,7 @@ import time
 import hashlib
 from ym_backend import model, db, util
 AccountModel = model.Account
-AlchemyEncoder = util.AlchemyEncoder
+sqlJsonDump = util.sqlJsonDump
 
 class Account(object):
   def __init__(self, arg):
@@ -93,7 +93,7 @@ class Account(object):
 
   # 处理响应
   def responseHandle(self, obj, **conf):
-    jsonStr = json.dumps(obj, cls = AlchemyEncoder, ensure_ascii = False)
+    jsonStr = sqlJsonDump(obj)
     response = make_response(jsonStr)
     response.headers['Content-Type'] = 'application/json'
     if conf and conf['headers']:
